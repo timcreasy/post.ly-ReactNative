@@ -19,9 +19,6 @@ app.get('/api/users', (req, res, next) => {
 
 
 app.post('/api/users', (req, res, next) => {
-
-  console.log(req.body);
-
   User.findOne({"username": req.body.username}, (err, user) => {
     if (err) { return next(err) };
     console.log(user);
