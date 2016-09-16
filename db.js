@@ -1,10 +1,8 @@
 const mongoose = require('mongoose');
 
-  // tcreasy:mypassword
-  // mongodb://<dbuser>:<dbpassword>@ds033046.mlab.com:33046/timcreasy-postly
+const MONGODB_URL = process.env.MONGODB_URL || 'mongodb://localhost/social'
 
-
-mongoose.connect('mongodb://localhost/social', () => {
+mongoose.connect(MONGODB_URL, () => {
   console.log("mongodb connected");
 });
 
