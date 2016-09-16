@@ -7,7 +7,8 @@ import {
   TextInput,
   TouchableHighlight
 } from 'react-native';
-import Api from './src/api';
+import getUser from './src/getUser';
+import getToken from './src/getToken';
 
 const Postly = React.createClass({
 
@@ -27,12 +28,17 @@ const Postly = React.createClass({
   },
 
   loginPressed() {
-    console.log(this.state);
-    Api(this.state.username, this.state.password)
-      .then((data) => {
-        console.log(data);
-      })
+
+    getToken(this.state.username, this.state.password)
+      .then((token) => {
+        getUser(token)
+          .then((userData) => {
+            console.log("LOGGED IN AS:");
+            console.log(userData);
+          });
+      });
   },
+
 
   render() {
     return (

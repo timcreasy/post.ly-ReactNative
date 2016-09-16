@@ -1,17 +1,14 @@
-module.exports = (username, password) => {
+module.exports = (token) => {
 
+  // GETS USER
   const QUERY = 'http://localhost:3000/api/users';
 
     const requestObj = {
-      method: 'POST',
+      method: 'GET',
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        username: username,
-        password: password
-      })
+        'x-auth': token
+      }
     };
 
     return fetch(QUERY, requestObj)
