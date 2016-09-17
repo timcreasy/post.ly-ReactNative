@@ -31,7 +31,7 @@ router.get('/api/users', (req, res, next) => {
   });
 });
 
-router.post('api/users', (req, res, next) => {
+router.post('/api/users', (req, res, next) => {
   let user = new User({username: req.body.username});
   bcrypt.hash(req.body.password, 10, (err, hash) => {
     if (err) { return next(err) };
