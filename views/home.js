@@ -11,7 +11,6 @@ import getPosts from '../src/getPosts';
 import PostList from './components/PostList';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import sendPost from '../src/sendPost';
-import auth from '../auth';
 
 const Home = React.createClass({
 
@@ -73,10 +72,13 @@ const Home = React.createClass({
 
   submitNewPost(event) {
     const newPost = {
-      username: auth.getUser(),
       body: event.nativeEvent.text
     };
-    console.log(newPost);
+    sendPost(newPost)
+      .then(post => {
+        console.log("POST", post);
+      })
+      .catch(err => console.log(err));
   },
 
   render() {

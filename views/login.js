@@ -11,7 +11,7 @@ import getToken from '../src/getToken';
 import Home from './home';
 import TextField from 'react-native-md-textinput';
 import AwesomeButton from 'react-native-awesome-button';
-import auth from '../auth';
+import auth from '../src/userAuth';
 
 const Login = React.createClass({
 
@@ -32,9 +32,9 @@ const Login = React.createClass({
     this.setState({password});
   },
 
-  _successfulLogin(username) {
+  _successfulLogin(token) {
     this.setState({ buttonState: 'success' });
-    auth.setUser(username);
+    auth.setUser(token);
     this.props.navigator.push({
       title: 'post.ly',
       component: Home
@@ -49,7 +49,7 @@ const Login = React.createClass({
       .then((token) => {
         getUser(token)
           .then((userData) => {
-            this._successfulLogin(userData.username);
+            this._successfulLogin(token);
           });
       });
   },

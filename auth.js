@@ -1,10 +1,9 @@
-let _currentUser = null;
+const jwt = require('jwt-simple');
+const config = require('./config');
 
-module.exports = {
-  setUser(username) {
-    _currentUser = username;
-  },
-  getUser() {
-    return _currentUser;
+module.exports = (req, res, next) => {
+  if (req.headers['x-auth']) {
+    req.auth = jwt.decode(req.headers['x-auth'], config.secret)
   }
+  next()
 };

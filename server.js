@@ -7,7 +7,7 @@ const app = express();
 require('./db')
 app.use(bodyParser.json());
 
-
+app.use(require('./auth'));
 app.use(require('./src/api/session'));
 app.use(require('./src/api/user'));
 app.use(require('./src/api/posts'));
