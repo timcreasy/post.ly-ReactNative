@@ -4,22 +4,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jwt-simple');
 const config = require('../../config');
 
-// router.get('/api/users', (req, res, next) => {
-//   User.findOne({}, (err, users) => {
-//     if (err) { return next(err) };
-//     res.json(users);
-//   });
-// });
-
-
-// router.post('/api/users', (req, res, next) => {
-//   User.findOne({"username": req.body.username}, (err, user) => {
-//     if (err) { return next(err) };
-//     console.log(user);
-//   });
-// });
-
-
 router.get('/api/users', (req, res, next) => {
   if (!req.headers['x-auth']) {
     return res.sendStatus(401);
