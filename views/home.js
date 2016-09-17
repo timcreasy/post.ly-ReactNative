@@ -6,10 +6,27 @@ import {
   TextInput,
   TouchableHighlight
 } from 'react-native';
-import getUser from '../src/getUser';
-import getToken from '../src/getToken';
+import getPosts from '../src/getPosts';
+import PostList from './components/PostList';
 
 const Home = React.createClass({
+
+  getInitialState() {
+    return ({ posts: [] })
+  },
+
+  componentDidMount() {
+    this.loadPosts();
+  },
+
+  loadPosts() {
+
+    getPosts()
+      .then(posts => {
+        this.setState({ posts: posts });
+      });
+
+  },
 
   render() {
     return (
@@ -17,6 +34,7 @@ const Home = React.createClass({
         <Text>
           Welcome Home
         </Text>
+        <PostList posts={this.state.posts}/>
       </View>
     );
   }

@@ -10,6 +10,7 @@ app.use(bodyParser.json());
 
 app.use(require('./src/api/session'));
 app.use(require('./src/api/user'));
+app.use(require('./src/api/posts'));
 
 app.listen(3000, () => {
   console.log("Server listening at port 3000...");
