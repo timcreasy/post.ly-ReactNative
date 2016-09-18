@@ -100,7 +100,7 @@ const Login = React.createClass({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 65,
+    marginTop: 60,
     padding: 10,
     justifyContent: 'flex-start',
     backgroundColor: '#F5FCFF',
