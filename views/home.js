@@ -9,25 +9,39 @@ import {
   TouchableHighlight,
   DeviceEventEmitter
 } from 'react-native';
+import { List, ListItem } from 'react-native-elements';
 import getPosts from '../src/getPosts';
 import sendPost from '../src/sendPost';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { List, ListItem } from 'react-native-elements';
 
 const windowSize = Dimensions.get('window');
 
-
 const Home = React.createClass({
 
+  // Initially set posts to empty array, visible height to full height of page
   getInitialState() {
-    return ({ posts: [] });
+    return ({ posts: [], visibleHeight: windowSize.height });
   },
 
+  // Reset visible height when keyboard will show
+  keyboardWillShow (e) {
+    let newSize = Dimensions.get('window').height - e.endCoordinates.height
+    this.setState({visibleHeight: newSize})
+  },
+
+  // Reset visible height when keyboard will hide
+  keyboardWillHide (e) {
+    this.setState({visibleHeight: Dimensions.get('window').height})
+  },
+
+  // Listen for keyboard events, and posts
   componentDidMount() {
+    DeviceEventEmitter.addListener('keyboardWillShow', this.keyboardWillShow.bind(this))
+    DeviceEventEmitter.addListener('keyboardWillHide', this.keyboardWillHide.bind(this))
     this.loadPosts();
     setInterval(this.loadPosts, 2000);
   },
 
+  // Fetch posts collection and store in state
   loadPosts() {
     return getPosts()
       .then(posts => {
@@ -38,84 +52,56 @@ const Home = React.createClass({
       });
   },
 
+  // Handle inputting of new post
   handleNewPostInput(newPost) {
     this.setState({ newPost })
   },
 
-  submitNewPost(event) {
+  // Handle submitting of new post
+  submitNewPost() {
     const newPost = {
-      body: event.nativeEvent.text
+      body: this.state.newPost
     };
-    sendPost(newPost)
-      .then(post => {
-        console.log("POST", post);
-      })
-      .catch(err => console.log(err));
-  },
 
-  // Scroll a component into view. Just pass the component ref string.
-  inputFocused (refName) {
-    setTimeout(() => {
-      let scrollResponder = this.refs.scrollView.getScrollResponder();
-      scrollResponder.scrollResponderScrollNativeHandleToKeyboard(
-        React.findNodeHandle(this.refs[refName]),
-        110, //additionalOffset
-        true
-      );
-    }, 50);
+    this.setState({ newPost: "" });
+
+    sendPost(newPost)
+      .then(post => {})
+      .catch(err => console.log(err));
   },
 
   render() {
 
-     /* <View style={styles.outside}>
-        <ScrollView
-            automaticallyAdjustContentInsets={false}
-            onScroll={() => { console.log('onScroll!'); }}
-            scrollEventThrottle={200}
-            style={styles.container}>
-          <List>
-            {
-              this.state.posts.map((post, i) => (
-                <ListItem
-                  key={i}
-                  title={post.body}
-                  subtitle={`@${post.username}`}
-                  icon={{name: 'person'}}
-                />
-              ))
-            }
-          </List>
-        </ScrollView>
-        <View style={styles.postContainer}>
-          <TextInput
-            style={styles.newPostInput}
-            onChangeText={this.handleNewPostInput}
-            value={this.state.text}
-          />
-        </View>
-      </View>
-
-      */
-    // var _scrollView: ScrollView;
-          // ref={(scrollView) => { _scrollView = scrollView; }}
-
     return (
-      <View style={styles.container}>
+      <View style={{height: this.state.visibleHeight}}>
         <View style={styles.chatContainer}>
-          <Text style={{color: '#000'}}>Chat</Text>
+          <ScrollView automaticallyAdjustContentInsets={false}>
+            <List>
+              {
+                this.state.posts.map((post, i) => (
+                  <ListItem
+                    key={i}
+                    title={post.body}
+                    subtitle={`@${post.username}`}
+                    icon={{name: 'person'}}
+                  />
+                ))
+              }
+            </List>
+          </ScrollView>
         </View>
         <View style={styles.inputContainer}>
           <View style={styles.textContainer}>
             <TextInput
               style={styles.input}
-              value={this.state.message}
-              onChangeText={(text) => this.setState({message: text})}
+              value={this.state.newPost}
+              onChangeText={this.handleNewPostInput}
               />
           </View>
           <View style={styles.sendContainer}>
             <TouchableHighlight
-              underlayColor={'#4e4273'}
-              onPress={() => this.onSendPress()}
+              underlayColor={'#334d5d'}
+              onPress={this.submitNewPost}
               >
               <Text style={styles.sendLabel}>SEND</Text>
             </TouchableHighlight>
@@ -128,48 +114,20 @@ const Home = React.createClass({
 
 });
 
- /* container: {
-    flex: 1,
-    marginTop: 40,
-    // justifyContent: 'flex-start',
-    backgroundColor: '#F5FCFF',
-    borderWidth: 3,
-    borderColor: 'orange'
-  },
-  outside: {
-    flex: 1
-  },
-  postContainer: {
-    justifyContent: 'flex-end'
-  },
-  newPostInput: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    // justifyContent: 'flex-end'
-  }
-  */
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  chatContainer: {
+    flex: 11,
+    marginTop: 40,
     justifyContent: 'center',
     alignItems: 'stretch',
-    backgroundColor: '#ffffff',
-    borderWidth: 3,
-    borderColor: 'orange'
   },
-  chatContainer: {
-      flex: 11,
-      justifyContent: 'center',
-      alignItems: 'stretch'
-    },
   inputContainer: {
-      flex: 1,
-      flexDirection: 'row',
-      justifyContent: 'space-around',
-      alignItems: 'center',
-      backgroundColor: '#6E5BAA'
-    },
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    backgroundColor: '#395668'
+  },
   textContainer: {
     flex: 1,
     justifyContent: 'center'
@@ -189,7 +147,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingTop: 5,
     height: 32,
-    borderColor: '#6E5BAA',
+    borderColor: '#395668',
     borderWidth: 1,
     borderRadius: 2,
     alignSelf: 'center',
