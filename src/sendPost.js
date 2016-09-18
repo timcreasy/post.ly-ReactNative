@@ -3,7 +3,7 @@ module.exports = (newPost) => {
   const userToken = require('./userAuth').getUser();
 
   // CREATES SESSION TOKEN
-  const QUERY = 'http://localhost:3000/api/posts';
+  const QUERY = 'http://104.236.71.66:8080/api/posts';
 
     const requestObj = {
       method: 'POST',

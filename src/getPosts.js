@@ -1,7 +1,7 @@
 module.exports = () => {
 
   // GETS USER
-  const QUERY = 'http://localhost:3000/api/posts';
+  const QUERY = 'http://104.236.71.66:8080/api/posts';
 
     const requestObj = {
       method: 'GET',

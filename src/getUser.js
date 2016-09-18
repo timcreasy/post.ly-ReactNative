@@ -1,7 +1,7 @@
 module.exports = (token) => {
 
   // GETS USER
-  const QUERY = 'http://localhost:3000/api/users';
+  const QUERY = 'http://104.236.71.66:8080/api/users';
 
     const requestObj = {
       method: 'GET',

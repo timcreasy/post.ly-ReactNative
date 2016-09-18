@@ -1,7 +1,7 @@
 module.exports = (username, password) => {
 
   // CREATES SESSION TOKEN
-  const QUERY = 'http://localhost:3000/api/sessions';
+  const QUERY = 'http://104.236.71.66:8080/api/sessions';
 
     const requestObj = {
       method: 'POST',
