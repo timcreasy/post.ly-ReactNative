@@ -4,7 +4,8 @@ import {
   Text,
   View,
   TextInput,
-  TouchableHighlight
+  TouchableHighlight,
+  Alert
 } from 'react-native';
 import getUser from '../src/getUser';
 import getToken from '../src/getToken';
@@ -47,10 +48,38 @@ const Login = React.createClass({
 
     getToken(this.state.username, this.state.password)
       .then((token) => {
-        getUser(token)
-          .then((userData) => {
-            this._successfulLogin(token);
-          });
+        if (token === "Invalid password") {
+          Alert.alert(
+            'Invalid Password',
+            'Password was invalid, please try again.',
+            [
+              {text: 'OK', onPress: () => console.log('OK Pressed')},
+            ]
+          );
+          this.setState({password: "", buttonState: "idle"});
+        } else if (token === "Invalid") {
+          Alert.alert(
+            'User not found',
+            'Username was not found, please try again.',
+            [
+              {text: 'OK', onPress: () => console.log('OK Pressed')},
+            ]
+          );
+          this.setState({password: "", username: "", buttonState: "idle"});
+        } else {
+          getUser(token)
+            .then((userData) => {
+              this._successfulLogin(token);
+            })
+            .catch((err) => {
+              console.log("NO USERDATA");
+              console.log("ERR", err);
+            })
+        }
+      })
+      .catch((err) => {
+        console.log("NO TOKEN");
+        console.log("ERR", err);
       });
   },
 

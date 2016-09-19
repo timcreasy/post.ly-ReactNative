@@ -20,7 +20,11 @@ module.exports = (username, password) => {
       return response.json();
     })
     .then((data) => {
-      return data.token;
+      if (data.error) {
+        return data.error;
+      } else {
+        return data.token;
+      }
     })
     .catch(err => console.log(err));
 
