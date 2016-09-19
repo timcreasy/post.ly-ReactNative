@@ -70,6 +70,11 @@ const Home = React.createClass({
       .catch(err => console.log(err));
   },
 
+  handleData(data) {
+    let result = JSON.parse(data);
+    console.log("DATA FROM WEBSOCKET:", result);
+  },
+
   render() {
 
     return (
